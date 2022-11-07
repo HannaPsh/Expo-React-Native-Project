@@ -11,6 +11,15 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen(props) {
+  const auth = useAuth();
+  const [loginFailed, setLoginFailed] = useState(false);
+
+  const handleSubmit = async ({ email, password }) => {
+    const result = await authApi.login(email, password);
+    if (!result.ok) return setLoginFailed(true);
+    setLoginFailed(false);
+    auth.logIn(result.data);
+  };
   return (
     <Screen style={styles.container}>
       <Image style={styles.logo} source={require('../assets/logo-red.png')} />
